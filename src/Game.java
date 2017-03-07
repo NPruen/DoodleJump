@@ -16,6 +16,8 @@ public class Game {
 	
 	private ArrayList<Object> m_objects;
 	
+	private int m_yTranslation;
+	
 	private boolean m_keyPressed = false;
 	private String m_keyInput;
 	private KeyListener m_keyboard = new KeyListener() {
@@ -42,6 +44,9 @@ public class Game {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			m_canvas.repaint();
+			for(Object object : m_objects) {
+				object.update();
+			}
 		}
 	};
 	private Timer timer;
@@ -53,11 +58,13 @@ public class Game {
 		
 		m_objects = new ArrayList<Object>();
 		m_objects.add(m_doodler);
+		createNewPad();
+		createNewPad(200);
+		createNewPad(400);
 		
 		m_canvas = new Canvas(SCREEN_DIMENSION, m_objects);
 		
-		timer = new Timer(20, clock);
-		timer.start();
+		m_yTranslation = 0;
 		
 		m_frame = new JFrame("Doodle Jump");
 		m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,6 +73,32 @@ public class Game {
 		m_frame.add(m_canvas);
 		m_frame.addKeyListener(m_keyboard);
 		m_frame.setVisible(true);
+		
+		timer = new Timer(20, clock);
+		timer.start();
+	}
+	
+	public void translate(int y) {
+		m_yTranslation = y;
+	}
+	
+	public int getTranslation() {
+		return m_yTranslation;
+	}
+	
+	
+	public void createNewPad() {
+		Pad pad = new Pad(this, 0);
+		m_objects.add(0, pad);
+	}
+	
+	public void createNewPad(int y) {
+		Pad pad = new Pad(this, y);
+		m_objects.add(0, pad);
+	}
+	
+	public void remove(Object object) {
+		m_objects.remove(object);
 	}
 	
 	public String getInput() {

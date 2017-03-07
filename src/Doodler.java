@@ -24,14 +24,6 @@ public class Doodler extends Object {
 	private int m_yPos = 250;
 	private int dy;
 	
-	private ActionListener m_clock = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			update();
-		}
-	};
-	private Timer timer;
-	
 	public Doodler(Game game) {
 		try {
 			img = ImageIO.read(new File(imgName));
@@ -43,9 +35,6 @@ public class Doodler extends Object {
 		dy = RESET_DY;
 		
 		screenDimension = m_game.getScreenDimension();
-		
-		timer = new Timer(20, m_clock);
-		timer.start();
 	}
 	
 	@Override
@@ -114,5 +103,5 @@ public class Doodler extends Object {
 	@Override
 	public BufferedImage getImage() {
 		return img;
-	}	
+	}
 }
