@@ -9,11 +9,13 @@ public class Object {
 		return img;
 	}
 	
-	public void update(){}
+	public void update() {
+	}
 	
 	public int getX() {
 		return m_x;
 	}
+	
 	public int getY() {
 		return m_y;
 	}

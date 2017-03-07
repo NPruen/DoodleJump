@@ -14,7 +14,7 @@ public class Canvas extends JPanel {
 	
 	public Canvas(Dimension d, ArrayList<Object> objects) {
 		setPreferredSize(d);
-		m_image = new BufferedImage((int)d.getWidth(), (int)d.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		m_image = new BufferedImage((int) d.getWidth(), (int) d.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		g = m_image.getGraphics();
 		
 		m_objects = objects;
@@ -24,22 +24,24 @@ public class Canvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		for(Object object : m_objects) {
+		for (Object object : m_objects) {
 			BufferedImage image = object.getImage();
 			try {
-				g.drawImage(image, object.getX() - image.getWidth(null)/2, object.getY() - image.getHeight(null)/2 , image.getWidth(null), image.getHeight(null), null);
-			} catch(NullPointerException ex) {
+				g.drawImage(image, object.getX() - image.getWidth(null) / 2, object.getY() - image.getHeight(null) / 2,
+								image.getWidth(null), image.getHeight(null), null);
+			} catch (NullPointerException ex) {
 				System.err.println("Couldn't draw image");
 			}
 		}
 	}
 	
-//	public void drawObject(Object object) {
-//		BufferedImage image = object.getImage();
-//		try {
-//			g.drawImage(image, object.getX(), object.getY(), image.getWidth(null), image.getHeight(null), null);
-//		} catch(NullPointerException ex) {
-//			System.err.println("Couldn't draw image");
-//		}
-//	}
+	// public void drawObject(Object object) {
+	// BufferedImage image = object.getImage();
+	// try {
+	// g.drawImage(image, object.getX(), object.getY(), image.getWidth(null),
+	// image.getHeight(null), null);
+	// } catch(NullPointerException ex) {
+	// System.err.println("Couldn't draw image");
+	// }
+	// }
 }

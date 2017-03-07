@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 
@@ -25,14 +24,16 @@ public class Game {
 		public void keyTyped(KeyEvent e) {
 			
 		}
+		
 		@Override
 		public void keyReleased(KeyEvent e) {
 			m_keyPressed = false;
 			m_keyInput = "";
 		}
+		
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(!m_keyPressed) {
+			if (!m_keyPressed) {
 				m_keyInput = "" + e.getKeyChar();
 				System.out.println(m_keyInput);
 				m_keyPressed = true;
@@ -44,7 +45,7 @@ public class Game {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			m_canvas.repaint();
-			for(Object object : m_objects) {
+			for (Object object : m_objects) {
 				object.update();
 			}
 		}
@@ -86,7 +87,6 @@ public class Game {
 		return m_yTranslation;
 	}
 	
-	
 	public void createNewPad() {
 		Pad pad = new Pad(this, 0);
 		m_objects.add(0, pad);
@@ -113,6 +113,9 @@ public class Game {
 		return SCREEN_DIMENSION;
 	}
 	
+	public ArrayList<Object> getObjects() {
+		return m_objects;
+	}
 	
 	public static void main(String[] args) {
 		Game game = new Game();

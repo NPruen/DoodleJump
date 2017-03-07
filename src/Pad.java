@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -16,11 +17,11 @@ public class Pad extends Object {
 	public Pad(Game game, int y) {
 		try {
 			img = ImageIO.read(new File(imgName));
-		} catch(IOException ex) {
+		} catch (IOException ex) {
 			System.out.println("Cant't find image " + imgName);
 		}
 		m_game = game;
-		m_xPos = (int)(Math.random()*m_game.getScreenDimension().getWidth());
+		m_xPos = (int) (Math.random() * m_game.getScreenDimension().getWidth());
 		m_yPos = y;
 	}
 	
@@ -28,19 +29,22 @@ public class Pad extends Object {
 	public void update() {
 		m_yPos += m_game.getTranslation();
 		
-		if(m_yPos >= m_game.getScreenDimension().getHeight()) {
+		if (m_yPos >= m_game.getScreenDimension().getHeight()) {
 			m_game.createNewPad();
-			m_game.remove(this); //suicide
+			m_game.remove(this); // suicide
 		}
 	}
+	
 	@Override
 	public int getX() {
 		return m_xPos;
 	}
+	
 	@Override
 	public int getY() {
 		return m_yPos;
 	}
+	
 	@Override
 	public BufferedImage getImage() {
 		return img;
