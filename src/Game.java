@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -13,7 +14,9 @@ public class Game {
 	
 	private static final Dimension SCREEN_DIMENSION = new Dimension(300, 500);
 	
-	private ArrayList<Object> m_objects;
+	private List<Object> m_objects;
+	private List<Object> m_toRemove;
+	private Integer m_numOfObjectsToAdd;
 	
 	private int m_yTranslation;
 	
@@ -44,10 +47,17 @@ public class Game {
 	private ActionListener clock = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			m_canvas.repaint();
-			for (Object object : m_objects) {
+			for(Object object : m_objects) {
 				object.update();
 			}
+			for(Object object : m_toRemove) {
+				m_objects.remove(object);
+			}
+			m_toRemove.removeAll(m_toRemove);
+			for(; m_numOfObjectsToAdd > 0; m_numOfObjectsToAdd--) {
+				createNewPad();
+			}
+			m_canvas.repaint();
 		}
 	};
 	private Timer timer;
@@ -58,6 +68,8 @@ public class Game {
 		m_doodler = new Doodler(this);
 		
 		m_objects = new ArrayList<Object>();
+		m_toRemove = new ArrayList<Object>();
+		m_numOfObjectsToAdd = new Integer(0);
 		m_objects.add(m_doodler);
 		createNewPad();
 		createNewPad(200);
@@ -101,6 +113,14 @@ public class Game {
 		m_objects.remove(object);
 	}
 	
+	public void addToToRemove(Object object) {
+		m_toRemove.add(object);
+	}
+	
+	public void addNewCreate() {
+		m_numOfObjectsToAdd++;
+	}
+	
 	public String getInput() {
 		return m_keyInput;
 	}
@@ -113,7 +133,7 @@ public class Game {
 		return SCREEN_DIMENSION;
 	}
 	
-	public ArrayList<Object> getObjects() {
+	public List<Object> getObjects() {
 		return m_objects;
 	}
 	

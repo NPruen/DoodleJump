@@ -12,7 +12,7 @@ public class Canvas extends JPanel {
 	
 	private List<Object> m_objects;
 	
-	public Canvas(Dimension d, ArrayList<Object> objects) {
+	public Canvas(Dimension d, List<Object> objects) {
 		setPreferredSize(d);
 		m_image = new BufferedImage((int) d.getWidth(), (int) d.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		g = m_image.getGraphics();

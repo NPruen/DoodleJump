@@ -4,17 +4,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 public class Doodler extends Object {
-	private static final int RESET_DY = -40;
-	private static final int DDY = 3;
+	private static final int RESET_DY = -35;
+	private static final int DDY = 2;
 	
 	private Game m_game;
 	
-	private ArrayList<Object> m_objects;
+	private List<Object> m_objects;
 	
 	private Dimension screenDimension;
 	
@@ -25,7 +26,6 @@ public class Doodler extends Object {
 	private double dx;
 	private int m_yPos = 250;
 	private int dy;
-	private int yPos;
 	
 	private int m_width;
 	private int m_height;
@@ -86,13 +86,12 @@ public class Doodler extends Object {
 		if(dy <= 30) {
 			dy += DDY;
 		}
-		m_yPos += dy;
-//		if(m_yPos >= screenDimension.getHeight()/3) {
-			yPos = m_yPos;
-//			m_game.translate(0);
-//		} else {
-//			m_game.translate(-dy);
-//		}
+		if(m_yPos <= screenDimension.getHeight()/3 && dy <= 0) {
+			m_game.translate(-dy);
+		} else {
+			m_yPos += dy;
+			m_game.translate(0);
+		}
 		
 		m_objects = m_game.getObjects();
 		
@@ -142,7 +141,7 @@ public class Doodler extends Object {
 	
 	@Override
 	public int getY() {
-		return yPos;
+		return m_yPos;
 	}
 	
 	@Override

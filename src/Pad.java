@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 
 import javax.imageio.ImageIO;
 
@@ -30,8 +31,8 @@ public class Pad extends Object {
 		m_yPos += m_game.getTranslation();
 		
 		if (m_yPos >= m_game.getScreenDimension().getHeight()) {
-			m_game.createNewPad();
-			m_game.remove(this); // suicide
+			m_game.addNewCreate();
+			m_game.addToToRemove(this); // suicide
 		}
 	}
 	
