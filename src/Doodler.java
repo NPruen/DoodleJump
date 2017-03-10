@@ -24,9 +24,9 @@ public class Doodler extends Object {
 	private BufferedImage img;
 	private String imgName = "images/Doodler.png";
 	
-	private int m_xPos = 150;
+	private int m_x = 150;
 	private double dx;
-	private int m_yPos = 250;
+	private int m_y = 250;
 	private double dy;
 	
 	private int m_width;
@@ -88,51 +88,63 @@ public class Doodler extends Object {
 		if(dy <= 30) {
 			dy += DDY;
 		}
-		if(m_yPos <= screenDimension.getHeight()/3 && dy <= 0) {
+		if(m_y <= screenDimension.getHeight()/3 && dy <= 0) {
 			m_game.translate(-dy);
 		} else {
-			m_yPos += dy;
+			m_y += dy;
 			m_game.translate(0);
 		}
 		
 		m_objects = m_game.getObjects();
 		
-		System.out.println(isOnObject());
-		if (isOnObject()) {
-			bounce();
+		try {
+			switch(isOnObject()) {
+				case "Pad": {
+					dy = RESET_DY;
+					break;
+				}
+				default: break;
+			}
+		} catch(NullPointerException ex) {
+			System.out.println("null");
 		}
 		
-		m_xPos += dx;
-		if (m_xPos >= screenDimension.getWidth()) {
-			m_xPos = 0;
-		} else if (m_xPos <= 0) {
-			m_xPos = (int) screenDimension.getWidth();
+		m_x += dx;
+		if (m_x >= screenDimension.getWidth()) {
+			m_x = 0;
+		} else if (m_x <= 0) {
+			m_x = (int) screenDimension.getWidth();
 		}
-		if(m_yPos >= m_game.getScreenDimension().getHeight()) {
+		if(m_y >= m_game.getScreenDimension().getHeight()) {
 			m_game.endGame();
 		}
 	}
 	
 	public void shoot() {
-		
+		m_game.createBullet(m_x, m_y, calculateDX(), calculateDY());
 	}
 	
-	public boolean isOnObject() {
+	public String isOnObject() {
 		for(Object obj : m_objects) {
-			if(obj.getClass() != Doodler.class) {
-				if((obj.getX()-obj.getImage().getWidth()/2 <= m_xPos + m_width/2)
-								&& (obj.getX() + obj.getImage().getWidth()/2 >= m_xPos - m_width/2)
-								&& (obj.getY() - dy/2 <= m_yPos + m_height)
-								&& (obj.getY() + obj.getImage().getHeight() + dy/2 >= m_yPos + m_height)
+			if(obj.getClass() == Pad.class) {
+				if((obj.getX()-obj.getImage().getWidth()/2 <= m_x + m_width/2)
+								&& (obj.getX() + obj.getImage().getWidth()/2 >= m_x - m_width/2)
+								&& (obj.getY() - dy/2 <= m_y + m_height)
+								&& (obj.getY() + obj.getImage().getHeight() + dy/2 >= m_y + m_height)
 								&& dy >= 0) {
-					m_yPos = obj.getY() - m_height;;
-					return true;
+					m_y = obj.getY() - m_height;
+					return obj.getClass().getName();
 				}
 			}
 		}
-		
-		
-		return false;
+		return null;
+	}
+	
+	public double calculateDX() {
+		return m_x - m_game.getMouseX();
+	}
+	public double calculateDY() {
+		return m_y - m_game.getMouseY();
 	}
 	
 	public void bounce() {
@@ -141,12 +153,12 @@ public class Doodler extends Object {
 	
 	@Override
 	public int getX() {
-		return m_xPos;
+		return m_x;
 	}
 	
 	@Override
 	public int getY() {
-		return m_yPos;
+		return m_y;
 	}
 	
 	@Override

@@ -3,6 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,6 +24,43 @@ public class Game {
 	
 	private double m_yTranslation;
 	
+	
+	private int m_mouseX, m_mouseY;
+	private MouseListener mouse = new MouseListener() {
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			m_doodler.shoot();
+		}
+	};
+	
+	private MouseMotionListener mouseMotion = new MouseMotionListener() {
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			m_mouseX = e.getX();
+			m_mouseY = e.getY();
+		}
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			
+		}
+	};
+	
 	private boolean m_keyPressed = false;
 	private String m_keyInput;
 	private KeyListener m_keyboard = new KeyListener() {
@@ -28,13 +68,11 @@ public class Game {
 		public void keyTyped(KeyEvent e) {
 			
 		}
-		
 		@Override
 		public void keyReleased(KeyEvent e) {
 			m_keyPressed = false;
 			m_keyInput = "";
 		}
-		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (!m_keyPressed) {
@@ -102,8 +140,15 @@ public class Game {
 		m_frame.addKeyListener(m_keyboard);
 		m_frame.setVisible(true);
 		
+		m_frame.addMouseListener(mouse);
+		m_frame.addMouseMotionListener(mouseMotion);
+		
 		timer = new Timer(10, clock);
 		timer.start();
+	}
+	
+	public void createBullet(double x, double y, double dx, double dy) {
+		m_objects.add(new Bullet(x, y, dx, dy));
 	}
 	
 	public void translate(double y) {
@@ -151,6 +196,14 @@ public class Game {
 	
 	public List<Object> getObjects() {
 		return m_objects;
+	}
+	
+	public int getMouseX() {
+		return m_mouseX;
+	}
+	
+	public int getMouseY() {
+		return m_mouseY;
 	}
 	
 	public void endGame() {
