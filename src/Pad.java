@@ -23,7 +23,7 @@ public class Pad extends Object {
 		}
 		m_game = game;
 		m_xPos = (int) (Math.random() * m_game.getScreenDimension().getWidth());
-		m_yPos = y;
+		m_yPos = y + (int) (Math.random() * 50);
 	}
 	
 	@Override

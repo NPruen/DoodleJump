@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Doodler extends Object {
-	private static final int RESET_DY = -35;
-	private static final int DDY = 2;
+	private static final int RESET_DY = -16;
+	private static final double DDY = .5;
 	
 	private Game m_game;
+	
+	private int m_score;
 	
 	private List<Object> m_objects;
 	
@@ -25,7 +27,7 @@ public class Doodler extends Object {
 	private int m_xPos = 150;
 	private double dx;
 	private int m_yPos = 250;
-	private int dy;
+	private double dy;
 	
 	private int m_width;
 	private int m_height;
@@ -53,14 +55,14 @@ public class Doodler extends Object {
 		try {
 			switch (m_game.getInput().toLowerCase()) {
 				case "a": {
-					if (dx >= -20) {
-						dx--;
+					if (dx >= -10) {
+						dx-=.5;
 					}
 					break;
 				}
 				case "d": {
-					if (dx <= 20) {
-						dx++;
+					if (dx <= 10) {
+						dx+=.5;
 					}
 					break;
 				}
@@ -69,14 +71,14 @@ public class Doodler extends Object {
 					break;
 				}
 				default:
-					if (dx > 1)
-						dx -= 2;
-					else if (dx < -1)
-						dx += 2;
+					if (dx > .5)
+						dx-=.5;
+					else if (dx < -.5)
+						dx+=.5;
 					else if (dx > 0)
-						dx--;
+						dx-=.25;
 					else if (dx < 0)
-						dx++;
+						dx+=.25;
 					break;
 			}
 		} catch (NullPointerException ex) {
@@ -96,7 +98,7 @@ public class Doodler extends Object {
 		m_objects = m_game.getObjects();
 		
 		System.out.println(isOnObject());
-		if (m_yPos >= m_game.getScreenDimension().getHeight() || isOnObject()) {
+		if (isOnObject()) {
 			bounce();
 		}
 		
@@ -105,6 +107,9 @@ public class Doodler extends Object {
 			m_xPos = 0;
 		} else if (m_xPos <= 0) {
 			m_xPos = (int) screenDimension.getWidth();
+		}
+		if(m_yPos >= m_game.getScreenDimension().getHeight()) {
+			m_game.endGame();
 		}
 	}
 	
@@ -115,10 +120,10 @@ public class Doodler extends Object {
 	public boolean isOnObject() {
 		for(Object obj : m_objects) {
 			if(obj.getClass() != Doodler.class) {
-				if((obj.getX() <= m_xPos + m_width) 
-								&& (obj.getX() + obj.getImage().getWidth() >= m_xPos) 
+				if((obj.getX()-obj.getImage().getWidth()/2 <= m_xPos + m_width/2)
+								&& (obj.getX() + obj.getImage().getWidth()/2 >= m_xPos - m_width/2)
 								&& (obj.getY() - dy/2 <= m_yPos + m_height)
-								&& (obj.getY() + obj.getImage().getHeight() + dy/2>= m_yPos + m_height)
+								&& (obj.getY() + obj.getImage().getHeight() + dy/2 >= m_yPos + m_height)
 								&& dy >= 0) {
 					m_yPos = obj.getY() - m_height;;
 					return true;

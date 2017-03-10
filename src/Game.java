@@ -10,6 +10,7 @@ import javax.swing.*;
 
 public class Game {
 	private JFrame m_frame;
+	private JLabel m_scoreboard;
 	private Canvas m_canvas;
 	
 	private static final Dimension SCREEN_DIMENSION = new Dimension(300, 500);
@@ -18,7 +19,7 @@ public class Game {
 	private List<Object> m_toRemove;
 	private Integer m_numOfObjectsToAdd;
 	
-	private int m_yTranslation;
+	private double m_yTranslation;
 	
 	private boolean m_keyPressed = false;
 	private String m_keyInput;
@@ -57,6 +58,9 @@ public class Game {
 			for(; m_numOfObjectsToAdd > 0; m_numOfObjectsToAdd--) {
 				createNewPad();
 			}
+			
+			m_scoreboard.setText("Score: " + m_score);
+			
 			m_canvas.repaint();
 		}
 	};
@@ -64,18 +68,27 @@ public class Game {
 	
 	private Doodler m_doodler;
 	
+	private int m_score;
+	
 	public Game() {
 		m_doodler = new Doodler(this);
+		
+		m_score = 0;
 		
 		m_objects = new ArrayList<Object>();
 		m_toRemove = new ArrayList<Object>();
 		m_numOfObjectsToAdd = new Integer(0);
 		m_objects.add(m_doodler);
 		createNewPad();
+		createNewPad(100);
 		createNewPad(200);
+		createNewPad(300);
 		createNewPad(400);
+		createNewPad(500);
 		
 		m_canvas = new Canvas(SCREEN_DIMENSION, m_objects);
+		
+		m_scoreboard = new JLabel();
 		
 		m_yTranslation = 0;
 		
@@ -83,19 +96,22 @@ public class Game {
 		m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m_frame.setSize(SCREEN_DIMENSION);
 		m_frame.setResizable(false);
-		m_frame.add(m_canvas);
+		m_frame.setLayout(new BorderLayout());
+		m_frame.add(m_canvas, BorderLayout.CENTER);
+		m_frame.add(m_scoreboard, BorderLayout.NORTH);
 		m_frame.addKeyListener(m_keyboard);
 		m_frame.setVisible(true);
 		
-		timer = new Timer(20, clock);
+		timer = new Timer(10, clock);
 		timer.start();
 	}
 	
-	public void translate(int y) {
+	public void translate(double y) {
 		m_yTranslation = y;
+		m_score += y;
 	}
 	
-	public int getTranslation() {
+	public double getTranslation() {
 		return m_yTranslation;
 	}
 	
@@ -135,6 +151,11 @@ public class Game {
 	
 	public List<Object> getObjects() {
 		return m_objects;
+	}
+	
+	public void endGame() {
+		timer.stop();
+		JOptionPane.showMessageDialog(m_frame, "You lost. Final score: " + m_score);
 	}
 	
 	public static void main(String[] args) {
